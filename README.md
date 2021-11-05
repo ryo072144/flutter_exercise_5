@@ -1,16 +1,9 @@
-# flutter_exercise_5
+# fFlutter基礎講座第５回練習問題
 
-Flutter基礎講座第４回練習問題
+## 問１
+入力したユーザーIDとパスワードが一致た状態でログインボタンを押すと、ListExercise画面に遷移できるようにしてください。
+入力したテキストは、**EditingController.textで取得できます。
 
-## Getting Started
+## 問２
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 問３
