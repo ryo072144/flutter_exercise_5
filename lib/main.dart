@@ -58,13 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               const SizedBox(height: 20,),
               ElevatedButton(
-                onPressed: (){
-
-                  //問１： Mapの基本的な使い方が理解できていれば良い。
-                  if(users[idEditingController.text] == passwordEditingController.text){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context){return const ListExercise();}));
-                  }
-                },
+                onPressed: (){},
                 child: const Text('ログイン', style: TextStyle(color: Colors.white),),
                 style: ButtonStyle(
                     padding: MaterialStateProperty.all(const EdgeInsets.all(20)),

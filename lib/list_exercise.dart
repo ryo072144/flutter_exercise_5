@@ -9,10 +9,7 @@ class ListExercise extends StatefulWidget {
 }
 
 class _ListExerciseState extends State<ListExercise> {
-  bool doesContain = false;
 
-  //問２： TextFieldの入力を管理するウィジェット。
-  TextEditingController numberEditingController = TextEditingController();
 
   List<int>? randomNumbers(){
     List<int> numbers = [];
@@ -37,40 +34,16 @@ class _ListExerciseState extends State<ListExercise> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-
-              //問２： あらかじめ作ったTextEditingControllerのインスタンスを指定する。
-              TextField(
-                controller: numberEditingController,
-                decoration: const InputDecoration(labelText: '入力', border: OutlineInputBorder()),
-              ),
-              const SizedBox(height: 20,),
               ElevatedButton(
                 onPressed: (){
-
-                  //問３： numbersはnullになる可能性があるので、contains()を使う部分では、あらかじめその可能性を排除しておく。
-                  List<int>? numbers = randomNumbers();
-                  if(numbers!=null){
-                    showDialog(context: context, builder: (context){
-                      return AlertDialog(
-
-                        //問３： contains()を使って条件分岐。numberEditingController.textはString型なので、int型に変換する。
-                        content: Text(
-                            '$numbersは${numberEditingController.text}を'
-                                +(numbers.contains(int.parse(numberEditingController.text))?'含みます':'含みません')
-                        ),
-                        actions: [TextButton(onPressed: (){Navigator.pop(context);}, child: const Text('OK'))],
-                      );
-                    });
-                  }else{
-                    showDialog(context: context, builder: (context){
-                      return AlertDialog(
-                        content: const Text(
+                  showDialog(context: context, builder: (context){
+                    return AlertDialog(
+                      content: const Text(
                           'nullです'
-                        ),
-                        actions: [TextButton(onPressed: (){Navigator.pop(context);}, child: const Text('OK'))],
-                      );
-                    });
-                  }
+                      ),
+                      actions: [TextButton(onPressed: (){Navigator.pop(context);}, child: const Text('OK'))],
+                    );
+                  });
                 },
                 child: const Text('表示', style: TextStyle(color: Colors.white),),
                 style: ButtonStyle(
