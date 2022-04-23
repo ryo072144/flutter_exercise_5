@@ -5,7 +5,7 @@
 ## 問１
 入力したユーザーIDとパスワードが一致た状態でログインボタンを押すと、ListExercise画面に遷移できるようにしてください。  
 ユーザーとパスワードの情報は、usersにマップとして保存されています。  
-入力したテキストは、**EditingController.textで取得できます。
+入力したテキストは、<span style="color: red; ">**EditingController.text</span>で取得できます。
 
 ## 問２
 表示ボタンの上に新しくTextFieldを追加してください。ラベルの名前は”入力”としてください。
