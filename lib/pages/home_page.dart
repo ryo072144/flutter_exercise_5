@@ -12,26 +12,39 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  TextEditingController idEditingController = TextEditingController();
-  TextEditingController passwordEditingController = TextEditingController();
-  int colorCode = Colors.blue.value;
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _idEditingController = TextEditingController();
+  final TextEditingController _passwordEditingController = TextEditingController();
+  int _colorCode = Colors.blue.value;
 
-  void setPrefs()async{
+  void setAccountPrefs() async {
     SharedPreferences prefs = await _prefs;
-    prefs.setString(idEditingController.text, passwordEditingController.text);
+    prefs.setString(_idEditingController.text, _passwordEditingController.text);
   }
 
-  void setColorCodePref(int newColorCode)async{
+  void setColorCodePref(int newColorCode) async {
     SharedPreferences prefs = await _prefs;
     prefs.setInt('colorCode', newColorCode);
     setState(() {
-      colorCode = newColorCode;
+      _colorCode = newColorCode;
     });
   }
 
-  void getColorCodePref()async{
+  void getColorCodePref() async {
     SharedPreferences prefs = await _prefs;
-    colorCode = prefs.getInt('colorCode')??colorCode;
+    _colorCode = prefs.getInt('colorCode') ?? _colorCode;
+  }
+
+  Future<String?> getPasswordByIDPref() async {
+    SharedPreferences prefs = await _prefs;
+    String? password = prefs.getString(_idEditingController.text);
+    return password;
+  }
+
+  void showCustomSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+    ));
   }
 
   @override
@@ -45,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('タイトル', style: AppTextStyles.title),
-        backgroundColor: Color(colorCode),
+        backgroundColor: Color(_colorCode),
         actions: [
           PopupMenuButton<int>(
             onSelected: (value) => setColorCodePref(value),
@@ -71,49 +84,79 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: SizedBox(
-          width: MediaQuery.of(context).size.width/2,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              TextField(
-                controller: idEditingController,
-                decoration: const InputDecoration(labelText: 'ID', border: OutlineInputBorder()),
-              ),
-              const SizedBox(height: 20,),
-              TextField(
-                controller: passwordEditingController,
-                obscureText: true,
-                decoration: const InputDecoration(labelText: 'パスワード', border: OutlineInputBorder(),),
-              ),
-              const SizedBox(height: 40,),
-              ElevatedButton(
-                onPressed: (){
-
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(20),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                  backgroundColor: Color(colorCode),
+          width: MediaQuery.of(context).size.width / 2,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                TextFormField(
+                  controller: _idEditingController,
+                  validator: (val) => val!.length < 6 ? 'IDは6文字以上必要です' : null,
+                  decoration: const InputDecoration(
+                      labelText: 'ID', border: OutlineInputBorder()),
                 ),
-                child: const Text('アカウント作成', style: TextStyle(color: Colors.white),),
-              ),
-              const SizedBox(height: 20,),
-              ElevatedButton(
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const ResultPage()));
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(20),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                  backgroundColor: Color(colorCode),
+                const SizedBox(
+                  height: 20,
                 ),
-                child: const Text('ログイン', style: TextStyle(color: Colors.white),),
-              ),
-            ],
+                TextFormField(
+                  controller: _passwordEditingController,
+                  validator: (val) =>
+                      val!.length < 6 ? 'パスワードは6文字以上必要です' : null,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'パスワード',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    setAccountPrefs();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(20),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    backgroundColor: Color(_colorCode),
+                  ),
+                  child: const Text('アカウント作成', style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      String? password = await getPasswordByIDPref();
+                      if (password == null) {
+                        showCustomSnackBar('登録されていないIDです');
+                      } else if (password != _passwordEditingController.text) {
+                        showCustomSnackBar('パスワードが違います');
+                      }else {
+                        if(mounted){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>const ResultPage()));
+                        }
+                      }
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(20),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    backgroundColor: Color(_colorCode),
+                  ),
+                  child: const Text('ログイン', style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
-
