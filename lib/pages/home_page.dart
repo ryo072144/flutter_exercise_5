@@ -41,12 +41,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return password;
   }
 
-  void showCustomSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message),
-    ));
-  }
-
   @override
   void initState() {
     super.initState();
@@ -92,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
               children: <Widget>[
                 TextFormField(
                   controller: _idEditingController,
-                  validator: (val) => val!.length < 6 ? 'IDは6文字以上必要です' : null,
+                  validator: (val) => val!.length < 4 ? 'IDは4文字以上必要です' : null,
                   decoration: const InputDecoration(
                       labelText: 'ID', border: OutlineInputBorder()),
                 ),
@@ -114,7 +108,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    setAccountPrefs();
+                    if (_formKey.currentState!.validate()){
+                      setAccountPrefs();
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(20),
@@ -132,14 +128,17 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       String? password = await getPasswordByIDPref();
+                      if(!mounted)return;
                       if (password == null) {
-                        showCustomSnackBar('登録されていないIDです');
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('登録されていないIDです'),
+                        ));
                       } else if (password != _passwordEditingController.text) {
-                        showCustomSnackBar('パスワードが違います');
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('パスワードが違います'),
+                        ));
                       }else {
-                        if(mounted){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>const ResultPage()));
-                        }
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>const ResultPage()));
                       }
                     }
                   },
