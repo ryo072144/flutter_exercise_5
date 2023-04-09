@@ -19,28 +19,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void setAccountPrefs() async {
     SharedPreferences prefs = await _prefs;
-    prefs.setString(_idEditingController.text, _passwordEditingController.text);
   }
 
   void setColorCodePref(int newColorCode) async {
     SharedPreferences prefs = await _prefs;
-    prefs.setInt('colorCode', newColorCode);
-    setState(() {
-      _colorCode = newColorCode;
-    });
   }
 
   void getColorCodePref() async {
     SharedPreferences prefs = await _prefs;
-    _colorCode = prefs.getInt('colorCode') ?? _colorCode;
   }
 
-  Future<String?> getPasswordByIDPref() async {
+  Future<String?> getPasswordByID() async {
     SharedPreferences prefs = await _prefs;
-    String? password = prefs.getString(_idEditingController.text);
-    return password;
   }
 
+  // ウィジェットが生成されるときに実行されるメソッド
   @override
   void initState() {
     super.initState();
@@ -108,9 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()){
-                      setAccountPrefs();
-                    }
+                    setAccountPrefs();
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(20),
@@ -126,20 +117,21 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      String? password = await getPasswordByIDPref();
-                      if(!mounted)return;
-                      if (password == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('登録されていないIDです'),
-                        ));
-                      } else if (password != _passwordEditingController.text) {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('パスワードが違います'),
-                        ));
-                      }else {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>const ResultPage()));
-                      }
+                    String? password = await getPasswordByID();
+
+                    // 非同期関数の中でcontextを使うときはこの一文が必要です。
+                    if(!mounted)return;
+
+                    if (password == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('登録されていないIDです'),
+                      ));
+                    } else if (password != _passwordEditingController.text) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('パスワードが違います'),
+                      ));
+                    }else {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const ResultPage()));
                     }
                   },
                   style: ElevatedButton.styleFrom(

@@ -1,16 +1,14 @@
-# flutter_exercise_5
+# Flutter基礎講座練習問題Part5
 
-Flutter基礎講座練習問題Part5
+## 問１
+入力したユーザーIDとパスワードが一致た状態でログインボタンを押すと、ListExercise画面に遷移できるようにしてください。  
+ユーザーとパスワードの情報は、usersにマップとして保存されています。  
+入力したテキストは、それぞれemailEditingController.text、passwordEditingController.textで取得できます。
 
-## Getting Started
+## 問２
+表示ボタンの上に新しくTextFieldを追加してください。ラベルの名前は”入力”としてください。
 
-This project is a starting point for a Flutter application.
+## 問３
+randomNumbers()は、１から１０までのランダムな整数を重複ありで５つ選んだリストを返します。ただし、最初に選ばれた数が奇数である場合、randomNumbers()はnullを返します。
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+問２で作成したTextFieldに入力した数が、randomNumbers()で作成されたリストに含まれるかどうかをAlertDialogで表示する機能を、表示ボタンに追加してください。
