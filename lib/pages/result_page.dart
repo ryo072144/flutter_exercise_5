@@ -11,13 +11,10 @@ class ResultPage extends StatefulWidget {
 
 class _ResultPageState extends State<ResultPage> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  int colorCode = 0xffffffff;
+  int colorCode = Colors.blue.value;
 
   void getColorCodePref()async{
     SharedPreferences prefs = await _prefs;
-    setState(() {
-      colorCode = prefs.getInt('colorCode')??colorCode;
-    });
   }
 
   @override

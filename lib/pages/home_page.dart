@@ -48,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Color(_colorCode),
         actions: [
           PopupMenuButton<int>(
-            onSelected: (value) => setColorCodePref(value),
+            onSelected: (value){},
             icon: const Icon(Icons.format_paint),
             itemBuilder: (BuildContext context) {
               return [
