@@ -19,18 +19,28 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void setAccountPrefs() async {
     SharedPreferences prefs = await _prefs;
+    prefs.setString(_idEditingController.text, _passwordEditingController.text);
   }
 
   void setColorCodePref(int newColorCode) async {
     SharedPreferences prefs = await _prefs;
+    setState(() {
+      _colorCode = newColorCode;
+    });
+    prefs.setInt('colorCode', _colorCode);
   }
 
   void getColorCodePref() async {
     SharedPreferences prefs = await _prefs;
+    setState(() {
+      _colorCode = prefs.getInt('colorCode')??_colorCode;
+    });
   }
 
   Future<String?> getPasswordByID() async {
     SharedPreferences prefs = await _prefs;
+    String? password = prefs.getString(_idEditingController.text);
+    return password;
   }
 
   // ウィジェットが生成されるときに実行されるメソッド
@@ -38,6 +48,15 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     getColorCodePref();
+  }
+
+  // ウィジェットが破棄されるときに実行されるメソッド
+  @override
+  void dispose() {
+    // コントローラーのインスタンスを破棄して、メモリを節約します
+    _idEditingController.dispose();
+    _passwordEditingController.dispose();
+    super.dispose();
   }
 
   @override
@@ -48,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Color(_colorCode),
         actions: [
           PopupMenuButton<int>(
-            onSelected: (value){},
+            onSelected: (value){setColorCodePref(value);},
             icon: const Icon(Icons.format_paint),
             itemBuilder: (BuildContext context) {
               return [
@@ -101,7 +120,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    setAccountPrefs();
+                    if(_formKey.currentState!.validate()){
+                      setAccountPrefs();
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(20),
@@ -117,6 +138,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
+                    if(!_formKey.currentState!.validate())return;
+
                     String? password = await getPasswordByID();
 
                     // 非同期関数の中でcontextを使うときはこの一文が必要です。
