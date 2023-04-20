@@ -11,3 +11,6 @@ SharedPreferenceに保存されているパスワードの内、入力したID�
 
 ## 問４
 ホームページのAppBarの右側のポップアップメニューで、選択した色がAppBarの色に反映されるようにしてください。また、アプリを閉じても変更が保存されるようにしてください。
+
+## 解答解説動画
+https://nk-free.com/mugi/videos/flutter_exercise_5.mp4
