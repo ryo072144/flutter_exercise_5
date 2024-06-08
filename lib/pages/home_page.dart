@@ -31,8 +31,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<String?> getPasswordByID() async {
     SharedPreferences prefs = await _prefs;
-    String? password = prefs.getString(_idEditingController.text);
-    return password;
   }
 
   // ウィジェットが生成されるときに実行されるメソッド
