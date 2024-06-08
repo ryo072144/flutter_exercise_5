@@ -19,22 +19,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void setAccountPrefs() async {
     SharedPreferences prefs = await _prefs;
-    prefs.setString(_idEditingController.text, _passwordEditingController.text);
   }
 
   void setColorCodePref(int newColorCode) async {
     SharedPreferences prefs = await _prefs;
-    setState(() {
-      _colorCode = newColorCode;
-    });
-    prefs.setInt('colorCode', _colorCode);
   }
 
   void getColorCodePref() async {
     SharedPreferences prefs = await _prefs;
-    setState(() {
-      _colorCode = prefs.getInt('colorCode')??_colorCode;
-    });
   }
 
   Future<String?> getPasswordByID() async {
@@ -67,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Color(_colorCode),
         actions: [
           PopupMenuButton<int>(
-            onSelected: (value){setColorCodePref(value);},
+            onSelected: (value){},
             icon: const Icon(Icons.format_paint),
             itemBuilder: (BuildContext context) {
               return [
@@ -120,9 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    if(_formKey.currentState!.validate()){
-                      setAccountPrefs();
-                    }
+                    setAccountPrefs();
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(20),
@@ -138,8 +128,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    if(!_formKey.currentState!.validate())return;
-
                     String? password = await getPasswordByID();
 
                     // 非同期関数の中でcontextを使うときはこの一文が必要です。
